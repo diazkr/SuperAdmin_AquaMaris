@@ -109,8 +109,8 @@ const CreateRoom = () => {
 
   const handleConfirm = () => {
     setOpenDialog(false);
-    router.push(`/rooms/${newRoomId}`);
-  };
+    window.location.href = `https://front-pfg-6.vercel.app/rooms/${newRoomId}`;
+};
 
   return (
     <>
