@@ -6,6 +6,7 @@ interface TabContentProps {
   selectedTab: string;
 }
 
+// hola
 const TabContent: React.FC<TabContentProps> = ({ selectedTab }) => {
   switch (selectedTab) {
     case 'Todos los usuarios':
@@ -16,6 +17,7 @@ const TabContent: React.FC<TabContentProps> = ({ selectedTab }) => {
       return <div>Contenido de Tab 3</div>;
     default:
       return <div>Seleccione una pestaña</div>;
+
   }
 };
 
