@@ -1,6 +1,7 @@
 "use client"
 import React, { useState } from 'react';
 import { Button, ButtonGroup, Box } from '@mui/material';
+import LineChart from '@/components/Graficas/Informacion/GraficaPrueba';
 
 interface TabContentProps {
   selectedTab: string;
@@ -15,7 +16,9 @@ const TabContent: React.FC<TabContentProps> = ({ selectedTab }) => {
     case 'Ver analisis financiero':
       return <div>Contenido de Tab 3</div>;
     default:
-      return <div>Seleccione una pestaña</div>;
+      return (<div>
+        <LineChart></LineChart>
+      </div>);
   }
 };
 
