@@ -30,12 +30,12 @@ export default function RootLayout({
 
             <div className="pt-4 pb-4  bg-body lg:flex-row h-full lg:h-screen">
               <div className="h-full grid grid-cols-12 gap-4">
-                <div className="col-span-3">
+                <div className="col-span-2">
                   <div className="w-full h-full">
                     <NavBar />
                   </div>
                 </div>
-                <div className="col-span-9">{children}</div>
+                <div className="col-span-10">{children}</div>
               </div>
             </div>
           </MantineProvider>

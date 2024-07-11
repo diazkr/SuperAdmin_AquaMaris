@@ -3,6 +3,7 @@ import React, { useState } from 'react';
 import { Button, ButtonGroup, Box } from '@mui/material';
 import CreateRoom from '@/components/Habitaciones/CrearNuevaHabitacion/CreateRoom';
 import ListaHabitaciones from '@/components/Habitaciones/EditHabitacion/ListHabitacion';
+import ListaHabitacionesEstado from '@/components/Habitaciones/CambiarEstadoHabitacion/ListHabitacionEstado';
 
 interface TabContentProps {
   selectedTab: string;
@@ -19,7 +20,9 @@ const TabContent: React.FC<TabContentProps> = ({ selectedTab }) => {
         <ListaHabitaciones/>
       );
     case 'Deshabilitar habitacion':
-      return <div>Contenido de Tab 3</div>;
+      return (<div>
+        <ListaHabitacionesEstado/>
+      </div> )
     default:
       return (<div>
         <CreateRoom />
