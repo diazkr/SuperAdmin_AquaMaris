@@ -1,20 +1,37 @@
 "use client";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { Line, Bar } from "react-chartjs-2";
 import "chart.js/auto";
-import generarDatosIngresos from "@/callBack/costos/IngresosTotales";
-import { Button, ButtonGroup } from "@mui/material";
+import { Button, ButtonGroup} from "@mui/material";
+import generarDatosUsuariosMes, { UserDataMes } from "@/callBack/usuarios/UsuariosPorMes";
 
-interface IngresosTotalesBarraProps {
+interface UsuariosTotalesBarraProps {
   rangoMeses: number;
 }
 
-const UsuariosTotales: React.FC<IngresosTotalesBarraProps> = ({
+const UsuariosTotales: React.FC<UsuariosTotalesBarraProps> = ({
   rangoMeses,
 }) => {
   const [tipoGrafico, setTipoGrafico] = useState<"line" | "bar">("line");
-  const datosIngresos = generarDatosIngresos(rangoMeses);
-  console.log(datosIngresos);
+  const [datosUsuarios, setDatosUsuarios] = useState<UserDataMes[]>([]);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    const fetchData = async () => {
+      const data = await generarDatosUsuariosMes(rangoMeses);
+      if (data) {
+        setDatosUsuarios(data);
+      }
+      setLoading(false);
+    };
+
+    fetchData();
+  }, [rangoMeses]);
+
+  if (loading) {
+    return <p>Cargando datos...</p>;
+  }
+
 
   const colores = [
     "rgba(75, 192, 192, 0.5)", // medio
@@ -32,11 +49,11 @@ const UsuariosTotales: React.FC<IngresosTotalesBarraProps> = ({
   ];
 
   const data = {
-    labels: datosIngresos.map((dato) => dato.mes),
+    labels: datosUsuarios.map((dato) => dato.month),
     datasets: [
       {
         label: "Usuarios",
-        data: datosIngresos.map((dato) => dato.data),
+        data: datosUsuarios.map((dato) => dato.count),
         fill: false,
         borderColor: "rgba(75,192,192,1)",
         backgroundColor: tipoGrafico === "bar" ? colores : "rgba(75,192,192,1)",
