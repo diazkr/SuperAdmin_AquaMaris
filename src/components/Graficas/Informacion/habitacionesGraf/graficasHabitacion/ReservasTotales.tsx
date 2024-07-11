@@ -2,36 +2,36 @@
 import React, { useEffect, useState } from "react";
 import { Line, Bar } from "react-chartjs-2";
 import "chart.js/auto";
-import { Button, ButtonGroup } from "@mui/material";
-import generarDatosIngresosPorMes, {
-  DatosIngresos,
-} from "@/callBack/costos/IngresosTotales";
+import { Button, ButtonGroup} from "@mui/material";
+import generarDatosUsuariosMes, { UserDataMes } from "@/callBack/usuarios/UsuariosPorMes";
 
-interface IngresosTotalesBarraProps {
+interface UsuariosTotalesBarraProps {
   rangoMeses: number;
 }
 
-const IngresosTotalesBarra: React.FC<IngresosTotalesBarraProps> = ({
+const UsuariosTotales: React.FC<UsuariosTotalesBarraProps> = ({
   rangoMeses,
 }) => {
   const [tipoGrafico, setTipoGrafico] = useState<"line" | "bar">("line");
-  const [datosIngresos, setDatosIngresos] = useState<DatosIngresos[]>([]);
-  const [loading, setLoading] = useState<boolean>(true);
+  const [datosUsuarios, setDatosUsuarios] = useState<UserDataMes[]>([]);
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    const fetchDatosIngresos = async () => {
-      const datos = await generarDatosIngresosPorMes(rangoMeses);
-      if (datos) {
-        setDatosIngresos(datos);
+    const fetchData = async () => {
+      const data = await generarDatosUsuariosMes(rangoMeses);
+      if (data) {
+        setDatosUsuarios(data);
       }
       setLoading(false);
     };
-    fetchDatosIngresos();
+
+    fetchData();
   }, [rangoMeses]);
 
   if (loading) {
     return <p>Cargando datos...</p>;
   }
+
 
   const colores = [
     "rgba(75, 192, 192, 0.5)", // medio
@@ -49,11 +49,11 @@ const IngresosTotalesBarra: React.FC<IngresosTotalesBarraProps> = ({
   ];
 
   const data = {
-    labels: datosIngresos.map((dato) => dato.mes),
+    labels: datosUsuarios.map((dato) => dato.month),
     datasets: [
       {
-        label: "Ingresos",
-        data: datosIngresos.map((dato) => dato.data),
+        label: "Usuarios",
+        data: datosUsuarios.map((dato) => dato.count),
         fill: false,
         borderColor: "rgba(75,192,192,1)",
         backgroundColor: tipoGrafico === "bar" ? colores : "rgba(75,192,192,1)",
@@ -67,20 +67,20 @@ const IngresosTotalesBarra: React.FC<IngresosTotalesBarraProps> = ({
     responsive: true,
     scales: {
       y: {
-        beginAtZero: true,
-      },
-    },
+        beginAtZero: true
+      }
+    }
   };
-
+  
   const handleTipoGraficoChange = (tipo: "line" | "bar") => {
     setTipoGrafico(tipo);
   };
 
   return (
-    <div className="h-full flex flex-col">
+    <div className="h-full flex flex-col w-[100%]">
       <div className="flex justify-between items-center">
         <h2 className="text-gray-600 font-normal text-sm">
-          Ingresos totales por mes
+          Usuarios registrados al mes
         </h2>
         <div>
           <ButtonGroup variant="outlined" aria-label="Basic button group">
@@ -104,15 +104,11 @@ const IngresosTotalesBarra: React.FC<IngresosTotalesBarraProps> = ({
 
       <div className="flex-1 flex items-center justify-center">
         <div className="chart-container w-full h-full">
-          {tipoGrafico === "line" ? (
-            <Line data={data} options={options} />
-          ) : (
-            <Bar data={data} options={options} />
-          )}
+          {tipoGrafico === "line" ? <Line data={data} options={options}/> : <Bar data={data} options={options}/>}
         </div>
       </div>
     </div>
   );
 };
 
-export default IngresosTotalesBarra;
+export default UsuariosTotales;

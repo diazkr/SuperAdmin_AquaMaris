@@ -3,7 +3,9 @@ import React, { useEffect, useState } from "react";
 import { Line, Bar, Pie } from "react-chartjs-2";
 import "chart.js/auto";
 import { Button, ButtonGroup } from "@mui/material";
-import IngresosPorTipo, { DatosIngresos } from "@/callBack/costos/IngresosPorTipo";
+import IngresosPorTipo, {
+  DatosIngresos,
+} from "@/callBack/costos/IngresosPorTipo";
 import IngresosTipoPorcentaje from "@/callBack/costos/IngresosTipoPorcentaje";
 
 interface IngresosTotalesBarraProps {
@@ -17,22 +19,19 @@ const IngresosTotalesPorTipo: React.FC<IngresosTotalesBarraProps> = ({
   const [datosIngresos, setDatosIngresos] = useState<DatosIngresos[]>([]);
   const [loading, setLoading] = useState<boolean>(true);
 
-
-  
-
   const colores = [
-    'rgba(75, 192, 192, 0.5)',  // medio
-    'rgba(55, 172, 172, 0.4)',  // intermedio claro
-    'rgba(75, 192, 192, 0.3)',  // claro
-    'rgba(35, 152, 152, 0.7)',  // intermedio oscuro
-    'rgba(75, 192, 192, 0.5)',  // medio
-    'rgba(15, 132, 132, 1)',    // oscuro
-    'rgba(75, 192, 192, 0.7)',  // más oscuro
-    'rgba(95, 212, 212, 0.2)',  // claro
-    'rgba(55, 172, 172, 0.6)',  // medio
-    'rgba(35, 152, 152, 0.9)',  // muy oscuro
-    'rgba(75, 192, 192, 1)',    // original
-    'rgba(15, 132, 132, 0.8)',  // más oscuro
+    "rgba(75, 192, 192, 0.5)", // medio
+    "rgba(55, 172, 172, 0.4)", // intermedio claro
+    "rgba(75, 192, 192, 0.3)", // claro
+    "rgba(35, 152, 152, 0.7)", // intermedio oscuro
+    "rgba(75, 192, 192, 0.5)", // medio
+    "rgba(15, 132, 132, 1)", // oscuro
+    "rgba(75, 192, 192, 0.7)", // más oscuro
+    "rgba(95, 212, 212, 0.2)", // claro
+    "rgba(55, 172, 172, 0.6)", // medio
+    "rgba(35, 152, 152, 0.9)", // muy oscuro
+    "rgba(75, 192, 192, 1)", // original
+    "rgba(15, 132, 132, 0.8)", // más oscuro
   ];
 
   useEffect(() => {
@@ -69,10 +68,11 @@ const IngresosTotalesPorTipo: React.FC<IngresosTotalesBarraProps> = ({
   };
 
   const options = {
-    maintainAspectRatio: true,
-    plugins: {
-      legend: {
-        position: "right" as const,
+    maintainAspectRatio: false,
+    responsive: true,
+    scales: {
+      y: {
+        beginAtZero: true,
       },
     },
   };
@@ -81,7 +81,7 @@ const IngresosTotalesPorTipo: React.FC<IngresosTotalesBarraProps> = ({
   };
 
   return (
-    <div className="h-full">
+    <div className="h-full flex flex-col">
       <div className="flex justify-between items-center">
         <h2 className="text-gray-600 font-normal text-sm">
           Ingresos totales por tipo de habitación
@@ -106,13 +106,17 @@ const IngresosTotalesPorTipo: React.FC<IngresosTotalesBarraProps> = ({
         </div>
       </div>
 
-      {tipoGrafico === "bar" ? (
-        <Bar data={data} />
-      ) : (
-        <div className="p-4 h-full w-[100%] flex justify-center ">
-          <Pie data={data} options={options}/>
+      <div className="flex-1 flex items-center justify-center">
+        <div className="chart-container w-full h-full">
+          {tipoGrafico === "bar" ? (
+            <Bar data={data} options={options} />
+          ) : (
+            <div className="p-4 h-full w-[100%] flex justify-center ">
+              <Pie data={data} options={options} />
+            </div>
+          )}
         </div>
-      )}
+      </div>
     </div>
   );
 };
