@@ -38,7 +38,7 @@ const PromocionesPage: React.FC = () => {
           </Button>
         ))}
       </div>
-      <Box style={{ padding: '1rem' }} className="bg-light-white  flex flex-col h-screen shadow-eco rounded-md mr-4">
+      <Box style={{ padding: '1rem' }} className="bg-light-white  flex flex-col h-full shadow-eco rounded-md mr-4">
         <TabContent selectedTab={selectedTab} />
       </Box>
     </Box>
