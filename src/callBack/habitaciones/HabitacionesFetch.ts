@@ -8,7 +8,7 @@ interface HabitacionesResponse {
 
 export const obtenerHabitaciones = async (): Promise<Habitacion[]> => {
   try {
-    const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/rooms`);
+    const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/rooms/?limit=15`);
     if (!response.ok) {
       throw new Error("Error al obtener las habitaciones");
     }

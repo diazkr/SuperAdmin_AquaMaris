@@ -3,7 +3,7 @@ import React, { useEffect, useState } from "react";
 import { Bar, Pie } from "react-chartjs-2";
 import "chart.js/auto";
 import { Button, ButtonGroup } from "@mui/material";
-import generarDatosUsuariosMembresia, { MembershipData } from "@/callBack/usuarios/UsuariosPremiumMock";
+import generarDatosUsuariosMembresia, { MembershipData } from "@/callBack/usuarios/UsuariosPremium";
 
 interface UsuariosPremiumTotalesProps {
   rangoMeses: number;

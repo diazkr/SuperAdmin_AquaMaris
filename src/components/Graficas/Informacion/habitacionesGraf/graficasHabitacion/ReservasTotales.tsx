@@ -1,32 +1,33 @@
 "use client";
 import React, { useEffect, useState } from "react";
-import { Line, Bar } from "react-chartjs-2";
+import { Bar, Line, Pie } from "react-chartjs-2";
 import "chart.js/auto";
 import { Button, ButtonGroup } from "@mui/material";
-import generarDatosIngresosPorMes, {
-  DatosIngresos,
-} from "@/callBack/costos/IngresosTotales";
+import generarReservasMes, {
+  UserReservationsMes,
+} from "@/callBack/habitaciones/habitacionesDashboard/ReservasTotal";
 
-interface IngresosTotalesBarraProps {
+interface ReservationsTotalesProps {
   rangoMeses: number;
 }
 
-const IngresosTotalesBarra: React.FC<IngresosTotalesBarraProps> = ({
+const ReservasTotalMes: React.FC<ReservationsTotalesProps> = ({
   rangoMeses,
 }) => {
   const [tipoGrafico, setTipoGrafico] = useState<"line" | "bar">("line");
-  const [datosIngresos, setDatosIngresos] = useState<DatosIngresos[]>([]);
-  const [loading, setLoading] = useState<boolean>(true);
+  const [datosReservas, setDatosReservas] = useState<UserReservationsMes[]>([]);
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    const fetchDatosIngresos = async () => {
-      const datos = await generarDatosIngresosPorMes(rangoMeses);
-      if (datos) {
-        setDatosIngresos(datos);
+    const fetchData = async () => {
+      const data = await generarReservasMes(rangoMeses);
+      if (data) {
+        setDatosReservas(data);
       }
       setLoading(false);
     };
-    fetchDatosIngresos();
+
+    fetchData();
   }, [rangoMeses]);
 
   if (loading) {
@@ -34,10 +35,6 @@ const IngresosTotalesBarra: React.FC<IngresosTotalesBarraProps> = ({
   }
 
   const colores = [
-    "rgba(75, 192, 192, 0.5)", // medio
-    "rgba(55, 172, 172, 0.4)", // intermedio claro
-    "rgba(75, 192, 192, 0.3)", // claro
-    "rgba(35, 152, 152, 0.7)", // intermedio oscuro
     "rgba(75, 192, 192, 0.5)", // medio
     "rgba(15, 132, 132, 1)", // oscuro
     "rgba(75, 192, 192, 0.7)", // más oscuro
@@ -49,15 +46,14 @@ const IngresosTotalesBarra: React.FC<IngresosTotalesBarraProps> = ({
   ];
 
   const data = {
-    labels: datosIngresos.map((dato) => dato.mes),
+    labels: datosReservas.map((dato) => dato.mes),
     datasets: [
       {
-        label: "Ingresos",
-        data: datosIngresos.map((dato) => dato.data),
-        fill: false,
+        label: "Reservaciones",
+        data: datosReservas.map((dato) => dato.data),
+        backgroundColor: colores,
         borderColor: "rgba(75,192,192,1)",
-        backgroundColor: tipoGrafico === "bar" ? colores : "rgba(75,192,192,1)",
-        tension: 0.4,
+        borderWidth: 1,
       },
     ],
   };
@@ -77,10 +73,10 @@ const IngresosTotalesBarra: React.FC<IngresosTotalesBarraProps> = ({
   };
 
   return (
-    <div className="h-full flex flex-col">
+    <div className="h-full flex flex-col w-[100%]">
       <div className="flex justify-between items-center">
         <h2 className="text-gray-600 font-normal text-sm">
-          Ingresos totales por mes
+          Reservaciones totales
         </h2>
         <div>
           <ButtonGroup variant="outlined" aria-label="Basic button group">
@@ -115,4 +111,4 @@ const IngresosTotalesBarra: React.FC<IngresosTotalesBarraProps> = ({
   );
 };
 
-export default IngresosTotalesBarra;
+export default ReservasTotalMes;

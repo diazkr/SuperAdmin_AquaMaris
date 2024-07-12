@@ -3,31 +3,32 @@ interface UserBookings {
   percentage: number;
 }
 
-interface UserData {
+ export interface UserData {
+  totalUsers: number;
   withBookings: UserBookings;
   withoutBookings: UserBookings;
 }
 
- const generarDatosUsuariosReservas = (rango: number): UserData => {
-  // Generar valores aleatorios para los datos de ejemplo
-  const withBookingsValue = Math.floor(Math.random() * 1000);
-  const withoutBookingsValue = Math.floor(Math.random() * 1000);
-  const totalUsers = withBookingsValue + withoutBookingsValue;
+const generarDatosUsuariosReservas = async (rangoMeses: number): Promise<UserData | null> => {
+  try {
+    const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/user/booking/percentage?months=${rangoMeses}`, {
+      method: 'GET',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+    });
 
-  const withBookingsPercentage =
-    totalUsers > 0 ? (withBookingsValue / totalUsers) * 100 : 0;
-  const withoutBookingsPercentage =
-    totalUsers > 0 ? (withoutBookingsValue / totalUsers) * 100 : 0;
+    if (!response.ok) {
+      throw new Error("Error al obtener los datos de usuarios de reservaciones");
+    }
 
-  return {
-    withBookings: {
-      value: withBookingsValue,
-      percentage: withBookingsPercentage,
-    },
-    withoutBookings: {
-      value: withoutBookingsValue,
-      percentage: withoutBookingsPercentage,
-    },
-  };
+    const data: UserData = await response.json();
+    return data;
+  } catch (error) {
+    console.error("Error al obtener los datos de usuarios de reservaciones", error);
+    return null;
+  }
 };
-export default generarDatosUsuariosReservas;
+
+
+export default generarDatosUsuariosReservas

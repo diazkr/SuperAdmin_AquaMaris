@@ -1,9 +1,9 @@
 "use client";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { Bar, Pie } from "react-chartjs-2";
 import "chart.js/auto";
-import { Button, ButtonGroup } from "@mui/material";
-import generarDatosUsuariosReservas from "@/callBack/usuarios/UsuarioReservasMock";
+import { Button, ButtonGroup, Typography } from "@mui/material";
+import generarDatosUsuariosReservas, { UserData } from "@/callBack/usuarios/UsuarioReservasMock";
 
 interface UsuariosPremiumTotalesProps {
   rangoMeses: number;
@@ -13,8 +13,27 @@ const UsuariosReservas: React.FC<UsuariosPremiumTotalesProps> = ({
   rangoMeses,
 }) => {
   const [tipoGrafico, setTipoGrafico] = useState<"bar" | "pie">("bar");
-  const datosUsuarios = generarDatosUsuariosReservas(rangoMeses);
-  console.log(datosUsuarios);
+  const [datosUsuarios, setDatosUsuarios] = useState<UserData | null>(null);
+  const [loading, setLoading] = useState(true);
+
+
+  useEffect(() => {
+    const fetchDatosUsuarios = async () => {
+      const data = await generarDatosUsuariosReservas(rangoMeses);
+      setDatosUsuarios(data);
+      setLoading(false);
+    };
+
+    fetchDatosUsuarios();
+  }, [rangoMeses]);
+
+  if (loading) {
+    return <Typography>Cargando datos...</Typography>;
+  }
+
+  if (!datosUsuarios) {
+    return <Typography>Error al cargar los datos</Typography>;
+  }
 
   const colores = [
     'rgba(75, 192, 192, 0.5)',  // medio
