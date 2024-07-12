@@ -4,8 +4,8 @@ import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
 import Select, { MultiValue } from "react-select";
 import { Button, TextField, MenuItem, Grid, Box } from "@mui/material";
-import { Habitacion, HabitacionError } from "../Interfaces/HabitacionInterface";
-import { validateRegister } from "../helpers/validate";
+import { Habitacion, HabitacionError } from "../../Interfaces/HabitacionInterface";
+import { validateRegister } from "../../helpers/validate";
 import ConfirmationDialog from "./ConfirmationDialog";
 
 const CreateRoom = () => {
