@@ -1,6 +1,6 @@
 "use client";
 import React, { useState } from "react";
-import SelectGeneral from "../generalPage.tsx/SelectGeneral";
+import SelectGeneral from "../costos/generalPage.tsx/SelectGeneral";
 import UsuariosTotales from "./GraficasUsuario/UsuarioTotal";
 import UsuariosReservas from "./GraficasUsuario/UsuariosReservas";
 import UsuariosPremiumGrafica from "./GraficasUsuario/UsuariosPremium";

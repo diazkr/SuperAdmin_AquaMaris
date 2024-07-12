@@ -1,9 +1,9 @@
 "use client";
 import React, { useState } from "react";
-import IngresosTotalesBarra from "../costos/IngresosTotales";
+import IngresosTotalesBarra from "../IngresosTotales";
 import SelectGeneral from "./SelectGeneral";
-import IngresosTotalesPorTipo from "../costos/IngresosPorTipo";
-import IngresosMesTipo from "../costos/IngresoTipoMes";
+import IngresosTotalesPorTipo from "../IngresosPorTipo";
+import IngresosMesTipo from "../IngresoTipoMes";
 
 function CostosPage() {
   const [rangoMeses, setRangoMeses] = useState<number>(6);

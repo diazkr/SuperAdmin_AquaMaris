@@ -1,9 +1,9 @@
 "use client";
 import React, { useState } from "react";
 import { Button, ButtonGroup, Box } from "@mui/material";
-import CostosPage from "@/components/Graficas/Informacion/generalPage.tsx/CostosPage";
-import UsuariosPage from "../Usuarios/page";
+import CostosPage from "@/components/Graficas/Informacion/costos/generalPage.tsx/CostosPage";
 import UsuariosPageInfo from "@/components/Graficas/Informacion/usuarios/UsuariosPageInfo";
+import GeneralPageHabitacion from "@/components/Graficas/Informacion/habitacionesGraf/generalPage/GeneralPageHabitacionex";
 
 interface TabContentProps {
   selectedTab: string;
@@ -24,7 +24,11 @@ const TabContent: React.FC<TabContentProps> = ({ selectedTab }) => {
         </div>
       );
     case "Reservas":
-      return <div>Contenido de Tab 3</div>;
+      return (
+        <div>
+          <GeneralPageHabitacion/>
+        </div>
+      );
     default:
       return (
         <div>

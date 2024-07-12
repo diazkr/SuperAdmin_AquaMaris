@@ -1,26 +1,28 @@
 "use client";
 import React, { useEffect, useState } from "react";
-import { Line, Bar } from "react-chartjs-2";
+import { Bar, Line, Pie } from "react-chartjs-2";
 import "chart.js/auto";
-import { Button, ButtonGroup} from "@mui/material";
-import generarDatosUsuariosMes, { UserDataMes } from "@/callBack/usuarios/UsuariosPorMes";
+import { Button, ButtonGroup } from "@mui/material";
+import generarReservasMes, {
+  UserReservationsMes,
+} from "@/callBack/habitaciones/habitacionesDashboard/ReservasTotal";
 
-interface UsuariosTotalesBarraProps {
+interface ReservationsTotalesProps {
   rangoMeses: number;
 }
 
-const UsuariosTotales: React.FC<UsuariosTotalesBarraProps> = ({
+const ReservasTotalMes: React.FC<ReservationsTotalesProps> = ({
   rangoMeses,
 }) => {
   const [tipoGrafico, setTipoGrafico] = useState<"line" | "bar">("line");
-  const [datosUsuarios, setDatosUsuarios] = useState<UserDataMes[]>([]);
+  const [datosReservas, setDatosReservas] = useState<UserReservationsMes[]>([]);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     const fetchData = async () => {
-      const data = await generarDatosUsuariosMes(rangoMeses);
+      const data = await generarReservasMes(rangoMeses);
       if (data) {
-        setDatosUsuarios(data);
+        setDatosReservas(data);
       }
       setLoading(false);
     };
@@ -32,12 +34,7 @@ const UsuariosTotales: React.FC<UsuariosTotalesBarraProps> = ({
     return <p>Cargando datos...</p>;
   }
 
-
   const colores = [
-    "rgba(75, 192, 192, 0.5)", // medio
-    "rgba(55, 172, 172, 0.4)", // intermedio claro
-    "rgba(75, 192, 192, 0.3)", // claro
-    "rgba(35, 152, 152, 0.7)", // intermedio oscuro
     "rgba(75, 192, 192, 0.5)", // medio
     "rgba(15, 132, 132, 1)", // oscuro
     "rgba(75, 192, 192, 0.7)", // más oscuro
@@ -49,15 +46,14 @@ const UsuariosTotales: React.FC<UsuariosTotalesBarraProps> = ({
   ];
 
   const data = {
-    labels: datosUsuarios.map((dato) => dato.month),
+    labels: datosReservas.map((dato) => dato.mes),
     datasets: [
       {
-        label: "Usuarios",
-        data: datosUsuarios.map((dato) => dato.count),
-        fill: false,
+        label: "Reservaciones",
+        data: datosReservas.map((dato) => dato.data),
+        backgroundColor: colores,
         borderColor: "rgba(75,192,192,1)",
-        backgroundColor: tipoGrafico === "bar" ? colores : "rgba(75,192,192,1)",
-        tension: 0.4,
+        borderWidth: 1,
       },
     ],
   };
@@ -67,11 +63,11 @@ const UsuariosTotales: React.FC<UsuariosTotalesBarraProps> = ({
     responsive: true,
     scales: {
       y: {
-        beginAtZero: true
-      }
-    }
+        beginAtZero: true,
+      },
+    },
   };
-  
+
   const handleTipoGraficoChange = (tipo: "line" | "bar") => {
     setTipoGrafico(tipo);
   };
@@ -80,7 +76,7 @@ const UsuariosTotales: React.FC<UsuariosTotalesBarraProps> = ({
     <div className="h-full flex flex-col w-[100%]">
       <div className="flex justify-between items-center">
         <h2 className="text-gray-600 font-normal text-sm">
-          Usuarios registrados al mes
+          Reservaciones totales
         </h2>
         <div>
           <ButtonGroup variant="outlined" aria-label="Basic button group">
@@ -104,11 +100,15 @@ const UsuariosTotales: React.FC<UsuariosTotalesBarraProps> = ({
 
       <div className="flex-1 flex items-center justify-center">
         <div className="chart-container w-full h-full">
-          {tipoGrafico === "line" ? <Line data={data} options={options}/> : <Bar data={data} options={options}/>}
+          {tipoGrafico === "line" ? (
+            <Line data={data} options={options} />
+          ) : (
+            <Bar data={data} options={options} />
+          )}
         </div>
       </div>
     </div>
   );
 };
 
-export default UsuariosTotales;
+export default ReservasTotalMes;
