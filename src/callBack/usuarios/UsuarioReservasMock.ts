@@ -11,10 +11,17 @@ interface UserBookings {
 
 const generarDatosUsuariosReservas = async (rangoMeses: number): Promise<UserData | null> => {
   try {
+    const token = localStorage.getItem('token'); 
+    console.log(token)
+    if (!token) {
+      throw new Error("Token not found");
+    }
     const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/user/booking/percentage?months=${rangoMeses}`, {
       method: 'GET',
       headers: {
         'Content-Type': 'application/json',
+        'Authorization': `Bearer ${token}`, 
+
       },
     });
 

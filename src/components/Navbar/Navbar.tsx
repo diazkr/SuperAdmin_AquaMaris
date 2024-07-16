@@ -14,7 +14,7 @@ function NavBar() {
           <BotonNav
             key={key}
             prop={item}
-            path={(item == "Habitaciones" ? "/" :"/"+ item)}
+            path={(item == "Habitaciones" ? "/dashboard/Habitaciones" :"/dashboard/"+ item)}
           ></BotonNav>
         ))}
       </div>
