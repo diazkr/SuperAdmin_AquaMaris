@@ -44,7 +44,7 @@ const ListaComentario: React.FC<ListaComentarioProps> = ({
       ) : comentarios.length === 0 ? (
         <ErrorComment text={titulo}/>
       ) : (
-        <List className="bg-light-white flex flex-col shadow-eco rounded-md p-6 w-[100%] my-1 overflow-y-auto">
+        <List className="bg-light-white flex flex-col shadow-eco rounded-md p-6 w-[100%] my-1 overflow-y-auto h-full">
           <p className="text-md font-medium text-gray-700">{titulo}</p>
 
           {comentarios.map((comentario) => (

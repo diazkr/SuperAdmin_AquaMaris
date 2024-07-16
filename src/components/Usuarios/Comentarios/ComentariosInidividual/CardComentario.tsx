@@ -20,16 +20,64 @@ const CardComentario: React.FC<CardUserProps> = ({ comentario }) => {
   const [snackbarMessage, setSnackbarMessage] = useState('');
   const [snackbarSeverity, setSnackbarSeverity] = useState<'success' | 'error'>('success');
 
-  const handleAprobar = () => {
-    setSnackbarMessage(`Usted ha aprobado el comentario con id ${id}`);
-    setSnackbarSeverity('success');
-    setOpenSnackbar(true);
+  const handleAprobar = async () => {
+    try {
+      const response = await fetch(
+        `${process.env.NEXT_PUBLIC_API_URL}/comment`,
+        {
+          method: 'PUT',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({
+            commentId: id,
+            newStatus: 'APPROVED',
+          }),
+        }
+      );
+
+      if (!response.ok) {
+        throw new Error('Error al aprobar el comentario');
+      }
+
+      setSnackbarMessage(`Usted ha aprobado el comentario con id ${id}`);
+      setSnackbarSeverity('success');
+      setOpenSnackbar(true);
+    } catch (error) {
+      setSnackbarMessage('Error al aprobar el comentario');
+      setSnackbarSeverity('error');
+      setOpenSnackbar(true);
+    }
   };
 
-  const handleNegar = () => {
-    setSnackbarMessage(`Usted ha negado el comentario con id ${id}`);
-    setSnackbarSeverity('error');
-    setOpenSnackbar(true);
+  const handleNegar = async () => {
+    try {
+      const response = await fetch(
+        `${process.env.NEXT_PUBLIC_API_URL}/comment`,
+        {
+          method: 'PUT',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({
+            commentId: id,
+            newStatus: 'DENIED',
+          }),
+        }
+      );
+
+      if (!response.ok) {
+        throw new Error('Error al negar el comentario');
+      }
+
+      setSnackbarMessage(`Usted ha negado el comentario con id ${id}`);
+      setSnackbarSeverity('error');
+      setOpenSnackbar(true);
+    } catch (error) {
+      setSnackbarMessage('Error al negar el comentario');
+      setSnackbarSeverity('error');
+      setOpenSnackbar(true);
+    }
   };
 
   const handleCloseSnackbar = (event: any, reason?: SnackbarCloseReason) => {

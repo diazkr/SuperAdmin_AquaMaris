@@ -5,7 +5,7 @@ import { UserInterface } from "@/components/Interfaces/UserInterface";
 
 export const obtenerUsuarios = async (): Promise<UserInterface[]> => {
   try {
-    const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/user`);
+    const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/user?limit=300`);
     if (!response.ok) {
       throw new Error("Error al obtener las habitaciones");
     }
