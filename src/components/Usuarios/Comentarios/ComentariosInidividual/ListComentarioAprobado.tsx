@@ -12,6 +12,7 @@ import CardHabitacionEstado from "./CardComentario";
 import { Comentario } from "@/components/Interfaces/UserInterface";
 import ErrorMessage from "@/components/Habitaciones/EditHabitacion/ErrorMessage";
 import CardComentario from "./CardComentario";
+import ErrorComment from "./ErrorComments";
 
 interface ListaComentarioProps {
   funcionComentario: () => Promise<Comentario[]>;
@@ -39,9 +40,9 @@ const ListaComentario: React.FC<ListaComentarioProps> = ({
   return (
     <div className="flex flex-col justify-around h-full w-full">
       {loading ? (
-        <Typography>Cargando comentarios</Typography>
+        <div>Cargando comentarios</div>
       ) : comentarios.length === 0 ? (
-        <ErrorMessage />
+        <ErrorComment text={titulo}/>
       ) : (
         <List className="bg-light-white flex flex-col shadow-eco rounded-md p-6 w-[100%] my-1 overflow-y-auto">
           <p className="text-md font-medium text-gray-700">{titulo}</p>

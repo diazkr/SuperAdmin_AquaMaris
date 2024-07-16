@@ -7,12 +7,19 @@ const generarDatosUsuariosMes = async (
   rangoMeses: number
 ): Promise<UserDataMes[] | null> => {
   try {
+    const token = localStorage.getItem('token'); 
+    console.log(token)
+    if (!token) {
+      throw new Error("Token not found");
+    }
     const response = await fetch(
       `${process.env.NEXT_PUBLIC_API_URL}/user/registered/months?months=${rangoMeses}`,
       {
         method: "GET",
         headers: {
           "Content-Type": "application/json",
+          'Authorization': `Bearer ${token}`, 
+
         },
       }
     );

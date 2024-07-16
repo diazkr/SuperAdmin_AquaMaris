@@ -20,7 +20,7 @@ export const obtenerComentariosAprobados = async (): Promise<Comentario[]> => {
 
 export const obtenerComentariosRevision = async (): Promise<Comentario[]> => {
     try {
-      const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/comment`);
+      const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/comment/inrevision`);
       if (!response.ok) {
         throw new Error("Error al obtener las habitaciones");
       }
@@ -34,7 +34,7 @@ export const obtenerComentariosRevision = async (): Promise<Comentario[]> => {
 
   export const obtenerComentariosDenegados = async (): Promise<Comentario[]> => {
     try {
-      const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/comment`);
+      const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/comment/denied`);
       if (!response.ok) {
         throw new Error("Error al obtener las habitaciones");
       }
