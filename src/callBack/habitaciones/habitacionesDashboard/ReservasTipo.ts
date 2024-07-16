@@ -4,10 +4,17 @@ export interface UserReservations {
 }
 const generarReservasTipo = async (rangoMeses: number): Promise<UserReservations[]| null> => {
   try {
+    const token = localStorage.getItem('token'); 
+    console.log(token)
+    if (!token) {
+      throw new Error("Token not found");
+    }
     const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/booking/forMonths/typeRoom?rango=${rangoMeses}`, {
       method: 'GET',
       headers: {
         'Content-Type': 'application/json',
+        'Authorization': `Bearer ${token}`, 
+
       },
     });
 

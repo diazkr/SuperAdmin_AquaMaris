@@ -9,6 +9,9 @@ import "@mantine/dates/styles.css";
 import { MantineProvider } from "@mantine/core";
 import { mantineTheme } from "@/mantineTheme";
 import NavBar from "@/components/Navbar/Navbar";
+import { useRouter } from "next/router";
+import { usePathname } from "next/navigation";
+import { AuthProvider } from "@/components/contextos/AuthContext";
 const inter = Inter({ subsets: ["latin"] });
 
 export const metadata: Metadata = {
@@ -26,18 +29,11 @@ export default function RootLayout({
       <body className={`flex flex-col min-h-screen ${inter.className}`}>
         <ThemeProvider theme={theme}>
           <MantineProvider theme={mantineTheme}>
-            <CssBaseline />
+            <AuthProvider>
+              <CssBaseline />
 
-            <div className="pt-4 pb-4  bg-body lg:flex-row h-full lg:h-screen">
-              <div className="h-full grid grid-cols-12 gap-4">
-                <div className="col-span-2">
-                  <div className="w-full h-full">
-                    <NavBar />
-                  </div>
-                </div>
-                <div className="col-span-10">{children}</div>
-              </div>
-            </div>
+              {children}
+            </AuthProvider>
           </MantineProvider>
         </ThemeProvider>
       </body>

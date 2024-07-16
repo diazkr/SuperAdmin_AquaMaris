@@ -8,12 +8,19 @@ const IngresosPorTipo = async (
   rangoMeses: number
 ): Promise<DatosIngresos[] | null> => {
   try {
+    const token = localStorage.getItem('token'); 
+    console.log(token)
+    if (!token) {
+      throw new Error("Token not found");
+    }
     const response = await fetch(
       `${process.env.NEXT_PUBLIC_API_URL}/payment/typesRevenue?rango=${rangoMeses}`,
       {
         method: "GET",
         headers: {
           'Content-Type': 'application/json',
+          'Authorization': `Bearer ${token}`, 
+
         }
       }
     );
