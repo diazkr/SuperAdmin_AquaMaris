@@ -1,12 +1,8 @@
-"use client";
-
 import React, { useEffect, useState } from "react";
 import {
   Button,
-  Container,
   List,
   ListItem,
-  ListItemText,
   TextField,
   Typography,
 } from "@mui/material";
@@ -23,16 +19,15 @@ const ListaHabitaciones: React.FC = () => {
   const [rooms, setRooms] = useState<Habitacion[]>([]);
   const [search, setSearch] = useState("");
   const [roomByNumber, setRoomByNumber] = useState<Habitacion | null>(null);
-
   const [loading, setLoading] = useState(true);
 
-  useEffect(() => {
-    const fetchRooms = async () => {
-      const roomsData = await obtenerHabitaciones();
-      setRooms(roomsData);
-      setLoading(false);
-    };
+  const fetchRooms = async () => {
+    const roomsData = await obtenerHabitaciones();
+    setRooms(roomsData);
+    setLoading(false);
+  };
 
+  useEffect(() => {
     fetchRooms();
   }, []);
 
@@ -50,8 +45,7 @@ const ListaHabitaciones: React.FC = () => {
         setRoomByNumber(null);
       }
     } else {
-      const roomsData = await obtenerHabitaciones();
-      setRooms(roomsData);
+      fetchRooms();
       setRoomByNumber(null);
     }
     setLoading(false);
@@ -66,13 +60,12 @@ const ListaHabitaciones: React.FC = () => {
           value={search}
           onChange={handleSearchChange}
           className="w-full"
-
         />
         <Button
           variant="contained"
           color="primary"
           onClick={handleSearchSubmit}
-          endIcon={<BsSearch/>}
+          endIcon={<BsSearch />}
           className="px-12"
         >
           Buscar
@@ -82,18 +75,18 @@ const ListaHabitaciones: React.FC = () => {
       {loading ? (
         <Typography>Cargando habitaciones...</Typography>
       ) : roomByNumber ? (
-        <List className="bg-light-white flex flex-col shadow-eco rounded-md p-6 w-[100%]  my-3 ">
+        <List className="bg-light-white flex flex-col shadow-eco rounded-md p-6 w-[100%] my-3">
           <ListItem>
-            <CardHabitacion habitacion={roomByNumber} />
+            <CardHabitacion habitacion={roomByNumber} onStateChange={fetchRooms} />
           </ListItem>
         </List>
       ) : rooms.length === 0 ? (
         <ErrorMessage />
       ) : (
-        <List className="bg-light-white flex flex-col shadow-eco rounded-md p-6 w-[100%] my-3">
+        <List className="bg-light-white flex flex-col shadow-eco rounded-md p-6 w-[100%] my-3 h-[70vh] overflow-y-auto">
           {rooms.map((room) => (
             <ListItem key={room.id}>
-              <CardHabitacion habitacion={room} />
+              <CardHabitacion habitacion={room} onStateChange={fetchRooms} />
             </ListItem>
           ))}
         </List>

@@ -1,10 +1,6 @@
 "use client";
-import { Button, MenuItem, Popover, Select, Typography } from "@mui/material";
-import { CiCircleMore } from "react-icons/ci";
-import { IoMdSend } from "react-icons/io";
-import { useRouter } from "next/navigation";
+import { Button, Typography, CircularProgress } from "@mui/material";
 import { useState } from "react";
-import { Habitacion } from "@/components/Interfaces/HabitacionInterface";
 import { UserInterface } from "../Interfaces/UserInterface";
 import Image from "next/image";
 import UserInfoModal from "./UserInfoModal";
@@ -12,13 +8,24 @@ import ConfirmBanDialog from "./DialogBannear";
 
 interface CardUserProps {
   user: UserInterface;
+  reloadUsers: () => void;
 }
 
-const CardUsuario: React.FC<CardUserProps> = ({ user }) => {
-  const { id, name, email, phone, country, reservations, comentario, photo } =
-    user;
+const CardUsuario: React.FC<CardUserProps> = ({ user, reloadUsers }) => {
+  const {
+    id,
+    name,
+    email,
+    phone,
+    country,
+    reservations,
+    comentario,
+    photo,
+    is_locked,
+  } = user;
   const [openModal, setOpenModal] = useState(false);
   const [openConfirmBan, setOpenConfirmBan] = useState(false);
+  const [loadingBan, setLoadingBan] = useState(false);
 
   const handleOpenModal = () => {
     setOpenModal(true);
@@ -36,9 +43,31 @@ const CardUsuario: React.FC<CardUserProps> = ({ user }) => {
     setOpenConfirmBan(false);
   };
 
-  const handleConfirmBan = () => {
-    console.log(`Usuario baneado: ${name}`);
-    handleCloseConfirmBan();
+  const handleConfirmBan = async () => {
+    setLoadingBan(true);
+    try {
+      const response = await fetch(
+        `${process.env.NEXT_PUBLIC_API_URL}/user/superadmin/blockUser/${id}`,
+        {
+          method: "PUT",
+          headers: {
+            "Content-Type": "application/json",
+          },
+        }
+      );
+
+      if (response.ok) {
+        console.log(`Usuario baneado: ${name}`);
+        await reloadUsers();
+      } else {
+        console.error("Error al bannear el usuario");
+      }
+    } catch (error) {
+      console.error("Error al bannear el usuario:", error);
+    } finally {
+      setLoadingBan(false);
+      handleCloseConfirmBan();
+    }
   };
 
   return (
@@ -73,8 +102,13 @@ const CardUsuario: React.FC<CardUserProps> = ({ user }) => {
             Ver más información
           </Button>
 
-          <Button variant="contained" color="error" onClick={handleOpenConfirmBan}>
-            Bannear usuario
+          <Button
+            variant="contained"
+            color="error"
+            onClick={handleOpenConfirmBan}
+            disabled={is_locked || loadingBan}
+          >
+            {loadingBan ? <CircularProgress size={24} /> : "Bannear usuario"}
           </Button>
         </div>
       </div>

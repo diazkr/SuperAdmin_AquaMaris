@@ -8,29 +8,24 @@ import {
   TextField,
   Typography,
 } from "@mui/material";
-import {
-  buscarHabitacionPorNumero,
-  obtenerHabitaciones,
-} from "@/callBack/habitaciones/HabitacionesFetch";
-import { Habitacion } from "@/components/Interfaces/HabitacionInterface";
-import { BsSearch } from "react-icons/bs";
-import CardHabitacionEstado from "./CardUsuario";
-import ErrorMessage from "../Habitaciones/EditHabitacion/ErrorMessage";
 import { UserInterface } from "../Interfaces/UserInterface";
 import { buscarUsuarioPorNombre, obtenerUsuarios } from "@/callBack/usuarios/UsuariosInfo/UsuariosFetch";
+import { BsSearch } from "react-icons/bs";
+import CardUsuario from "./CardUsuario";
+import ErrorMessage from "../Habitaciones/EditHabitacion/ErrorMessage";
 
 const ListaUsuario: React.FC = () => {
   const [users, setUsers] = useState<UserInterface[]>([]);
   const [search, setSearch] = useState("");
   const [loading, setLoading] = useState(true);
 
-  useEffect(() => {
-    const fetchUsers = async () => {
-      const usersData = await obtenerUsuarios();
-      setUsers(usersData);
-      setLoading(false);
-    };
+  const fetchUsers = async () => {
+    const usersData = await obtenerUsuarios();
+    setUsers(usersData);
+    setLoading(false);
+  };
 
+  useEffect(() => {
     fetchUsers();
   }, []);
 
@@ -44,10 +39,13 @@ const ListaUsuario: React.FC = () => {
       const userData = await buscarUsuarioPorNombre(search);
       if (userData) {
         setUsers(userData);
-      } 
+      } else {
+        return (
+          <div>No hay usuarios con ese nombre</div>
+        )
+      }
     } else {
-      const usersData = await obtenerUsuarios();
-      setUsers(usersData );
+      await fetchUsers();
     }
     setLoading(false);
   };
@@ -61,7 +59,6 @@ const ListaUsuario: React.FC = () => {
           value={search}
           onChange={handleSearchChange}
           className="w-full"
-
         />
         <Button
           variant="contained"
@@ -75,14 +72,14 @@ const ListaUsuario: React.FC = () => {
       </div>
 
       {loading ? (
-        <Typography>Cargando usuarios</Typography>
+        <Typography>Cargando usuarios...</Typography>
       ) : users.length === 0 ? (
         <ErrorMessage />
       ) : (
-        <List className="bg-light-white flex flex-col shadow-eco rounded-md p-6 w-[100%] my-3">
+        <List className="bg-light-white flex flex-col shadow-eco rounded-md p-6 w-[100%] my-3 h-[70vh] overflow-y-auto">
           {users.map((user) => (
             <ListItem key={user.id}>
-              <CardHabitacionEstado user={user} />
+              <CardUsuario user={user} reloadUsers={fetchUsers} />
             </ListItem>
           ))}
         </List>
