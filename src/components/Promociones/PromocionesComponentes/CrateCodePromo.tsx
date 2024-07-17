@@ -1,8 +1,13 @@
 import React, { useState, useEffect } from 'react';
 import { TextField, Button, Typography, Box, Snackbar, Alert } from '@mui/material';
 import createPromoCode from '@/callBack/promociones/CreatePromoCode';
+import { PromoCodeInterface } from '@/callBack/promociones/GetAllPromos';
 
-const CreateCodePromo: React.FC = () => {
+interface CreateCodePromoProps {
+  addNewPromoCode: (newCode: PromoCodeInterface) => void;
+}
+
+const CreateCodePromo: React.FC<CreateCodePromoProps> = ({ addNewPromoCode }) => {
   const [description, setDescription] = useState('');
   const [percentage, setPercentage] = useState<number | string>('');
   const [availableUses, setAvailableUses] = useState<number | string>('');
@@ -14,7 +19,6 @@ const CreateCodePromo: React.FC = () => {
     availableUses: false,
   });
   const [openSnackbar, setOpenSnackbar] = useState(false);
-
 
   useEffect(() => {
     validateForm();
@@ -46,6 +50,7 @@ const CreateCodePromo: React.FC = () => {
     const response = await createPromoCode(promoData);
 
     if (response) {
+      addNewPromoCode(response);
       setSuccess('Código promocional creado exitosamente');
       setOpenSnackbar(true);
       setDescription('');
@@ -57,6 +62,7 @@ const CreateCodePromo: React.FC = () => {
       setErrors({ api: 'Error al crear el código promocional' });
     }
   };
+
   const handleCloseSnackbar = (event?: React.SyntheticEvent | Event, reason?: string) => {
     if (reason === 'clickaway') {
       return;
@@ -66,10 +72,9 @@ const CreateCodePromo: React.FC = () => {
 
   return (
     <div>
-        <p className='text-gray-600'>Crear código de descuento</p>
+      <p className='text-gray-600'>Crear código de descuento</p>
       <div>
         <Box component="form" noValidate autoComplete="off" className='flex w-[100%] gap-6 items-center justify-center'>
-
           <div>
             <TextField
               fullWidth
@@ -118,7 +123,6 @@ const CreateCodePromo: React.FC = () => {
               variant="contained"
               color="primary"
               onClick={handleSubmit}
-
               disabled={Object.keys(errors).length > 0 || !description || !percentage || !availableUses}
             >
               Crear Código de descuento
@@ -136,7 +140,6 @@ const CreateCodePromo: React.FC = () => {
           Código promocional creado exitosamente
         </Alert>
       </Snackbar>
-      
     </div>
   );
 };
