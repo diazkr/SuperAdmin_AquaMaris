@@ -4,89 +4,110 @@ import {
   Rating,
   Snackbar,
   Alert,
+  CircularProgress,
   SnackbarCloseReason,
 } from "@mui/material";
-import { SyntheticEvent, useState } from "react";
+import { useState } from "react";
 import { Comentario } from "@/components/Interfaces/UserInterface";
 
 interface CardUserProps {
   comentario: Comentario;
+  onComentarioActualizado: () => void;
 }
 
-const CardComentario: React.FC<CardUserProps> = ({ comentario }) => {
+const CardComentario: React.FC<CardUserProps> = ({
+  comentario,
+  onComentarioActualizado,
+}) => {
   const { id, comment, rating, comment_date, comment_status } = comentario;
-  
+
   const [openSnackbar, setOpenSnackbar] = useState(false);
-  const [snackbarMessage, setSnackbarMessage] = useState('');
-  const [snackbarSeverity, setSnackbarSeverity] = useState<'success' | 'error'>('success');
+  const [snackbarMessage, setSnackbarMessage] = useState("");
+  const [snackbarSeverity, setSnackbarSeverity] = useState<"success" | "error">(
+    "success"
+  );
+  const [loadingAprobar, setLoadingAprobar] = useState(false);
+  const [loadingNegar, setLoadingNegar] = useState(false);
 
   const handleAprobar = async () => {
+    setLoadingAprobar(true);
+    setSnackbarMessage(`Usted ha aprobado el comentario con id ${id}`);
+    setSnackbarSeverity("success");
+    setOpenSnackbar(true);
     try {
       const response = await fetch(
         `${process.env.NEXT_PUBLIC_API_URL}/comment`,
         {
-          method: 'PUT',
+          method: "PUT",
           headers: {
-            'Content-Type': 'application/json',
+            "Content-Type": "application/json",
           },
           body: JSON.stringify({
             commentId: id,
-            newStatus: 'APPROVED',
+            newStatus: "APPROVED",
           }),
         }
       );
 
       if (!response.ok) {
-        throw new Error('Error al aprobar el comentario');
+        throw new Error("Error al aprobar el comentario");
       }
 
-      setSnackbarMessage(`Usted ha aprobado el comentario con id ${id}`);
-      setSnackbarSeverity('success');
-      setOpenSnackbar(true);
+      onComentarioActualizado();
     } catch (error) {
-      setSnackbarMessage('Error al aprobar el comentario');
-      setSnackbarSeverity('error');
+      setSnackbarMessage("Error al aprobar el comentario");
+      setSnackbarSeverity("error");
       setOpenSnackbar(true);
+      console.log("Snackbar should open with error message.");
+    } finally {
+      setLoadingAprobar(false);
     }
   };
 
   const handleNegar = async () => {
+    setLoadingNegar(true);
+    setSnackbarMessage(`Usted ha negado el comentario con id ${id}`);
+    setSnackbarSeverity("error");
+    setOpenSnackbar(true);
     try {
       const response = await fetch(
         `${process.env.NEXT_PUBLIC_API_URL}/comment`,
         {
-          method: 'PUT',
+          method: "PUT",
           headers: {
-            'Content-Type': 'application/json',
+            "Content-Type": "application/json",
           },
           body: JSON.stringify({
             commentId: id,
-            newStatus: 'DENIED',
+            newStatus: "DENIED",
           }),
         }
       );
 
       if (!response.ok) {
-        throw new Error('Error al negar el comentario');
+        throw new Error("Error al negar el comentario");
       }
 
-      setSnackbarMessage(`Usted ha negado el comentario con id ${id}`);
-      setSnackbarSeverity('error');
-      setOpenSnackbar(true);
+      onComentarioActualizado();
     } catch (error) {
-      setSnackbarMessage('Error al negar el comentario');
-      setSnackbarSeverity('error');
+      setSnackbarMessage("Error al negar el comentario");
+      setSnackbarSeverity("error");
       setOpenSnackbar(true);
+    } finally {
+      setLoadingNegar(false);
     }
   };
 
-  const handleCloseSnackbar = (event: any, reason?: SnackbarCloseReason) => {
-    if (reason === 'clickaway') {
+  const handleCloseSnackbar = (
+    event: React.SyntheticEvent | Event,
+    reason?: SnackbarCloseReason
+  ) => {
+    if (reason === "clickaway") {
       return;
     }
+    console.log("Snackbar is closing");
     setOpenSnackbar(false);
   };
-
 
   return (
     <div className="my-1 border border-gray-300 w-[100%]">
@@ -107,19 +128,19 @@ const CardComentario: React.FC<CardUserProps> = ({ comentario }) => {
         <div className="flex justify-center items-center p-2 gap-6">
           <Button
             variant="contained"
-            disabled={comment_status === "APPROVED"}
+            disabled={comment_status === "APPROVED" || loadingAprobar}
             onClick={handleAprobar}
           >
-            Aprobar
+            {loadingAprobar ? <CircularProgress size={24} /> : "Aprobar"}
           </Button>
 
           <Button
             variant="outlined"
             color="error"
-            disabled={comment_status === "DENIED"}
+            disabled={comment_status === "DENIED" || loadingNegar}
             onClick={handleNegar}
           >
-            Negar
+            {loadingNegar ? <CircularProgress size={24} /> : "Negar"}
           </Button>
         </div>
       </div>
@@ -127,10 +148,13 @@ const CardComentario: React.FC<CardUserProps> = ({ comentario }) => {
         open={openSnackbar}
         autoHideDuration={6000}
         onClose={handleCloseSnackbar}
-        anchorOrigin={{vertical: 'top', horizontal: 'right'  }}
-
+        anchorOrigin={{ vertical: "top", horizontal: "right" }}
       >
-        <Alert onClose={handleCloseSnackbar} severity={snackbarSeverity} sx={{ width: '100%' }}>
+        <Alert
+          onClose={handleCloseSnackbar}
+          severity={snackbarSeverity}
+          sx={{ width: "100%" }}
+        >
           {snackbarMessage}
         </Alert>
       </Snackbar>

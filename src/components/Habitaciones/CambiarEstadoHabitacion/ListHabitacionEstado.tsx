@@ -1,17 +1,8 @@
 "use client";
 
 import React, { useEffect, useState } from "react";
-import {
-  Button,
-  List,
-  ListItem,
-  TextField,
-  Typography,
-} from "@mui/material";
-import {
-  buscarHabitacionPorNumero,
-  obtenerHabitaciones,
-} from "@/callBack/habitaciones/HabitacionesFetch";
+import { Button, List, ListItem, TextField, Typography } from "@mui/material";
+import { buscarHabitacionPorNumero, obtenerHabitaciones } from "@/callBack/habitaciones/HabitacionesFetch";
 import { Habitacion } from "@/components/Interfaces/HabitacionInterface";
 import { BsSearch } from "react-icons/bs";
 import ErrorMessage from "../EditHabitacion/ErrorMessage";
@@ -21,16 +12,16 @@ const ListaHabitacionesEstado: React.FC = () => {
   const [rooms, setRooms] = useState<Habitacion[]>([]);
   const [search, setSearch] = useState("");
   const [roomByNumber, setRoomByNumber] = useState<Habitacion | null>(null);
-
   const [loading, setLoading] = useState(true);
 
-  useEffect(() => {
-    const fetchRooms = async () => {
-      const roomsData = await obtenerHabitaciones();
-      setRooms(roomsData);
-      setLoading(false);
-    };
+  const fetchRooms = async () => {
+    setLoading(true);
+    const roomsData = await obtenerHabitaciones();
+    setRooms(roomsData);
+    setLoading(false);
+  };
 
+  useEffect(() => {
     fetchRooms();
   }, []);
 
@@ -55,6 +46,10 @@ const ListaHabitacionesEstado: React.FC = () => {
     setLoading(false);
   };
 
+  const handleStateChange = () => {
+    fetchRooms();
+  };
+
   return (
     <div className="flex flex-col justify-around h-full w-full">
       <div className="bg-light-white flex shadow-eco rounded-md p-6 w-[100%] gap-4">
@@ -64,13 +59,12 @@ const ListaHabitacionesEstado: React.FC = () => {
           value={search}
           onChange={handleSearchChange}
           className="w-full"
-
         />
         <Button
           variant="contained"
           color="primary"
           onClick={handleSearchSubmit}
-          endIcon={<BsSearch/>}
+          endIcon={<BsSearch />}
           className="px-12"
         >
           Buscar
@@ -82,16 +76,16 @@ const ListaHabitacionesEstado: React.FC = () => {
       ) : roomByNumber ? (
         <List className="bg-light-white flex flex-col shadow-eco rounded-md p-6 w-[100%]  my-3 ">
           <ListItem>
-            <CardHabitacionEstado habitacion={roomByNumber} />
+            <CardHabitacionEstado habitacion={roomByNumber} onStateChange={handleStateChange} />
           </ListItem>
         </List>
       ) : rooms.length === 0 ? (
         <ErrorMessage />
       ) : (
-        <List className="bg-light-white flex flex-col shadow-eco rounded-md p-6 w-[100%] my-3">
+        <List className="bg-light-white flex flex-col shadow-eco rounded-md p-6 w-[100%] my-3 h-[70vh] overflow-y-auto">
           {rooms.map((room) => (
             <ListItem key={room.id}>
-              <CardHabitacionEstado habitacion={room} />
+              <CardHabitacionEstado habitacion={room} onStateChange={handleStateChange} />
             </ListItem>
           ))}
         </List>

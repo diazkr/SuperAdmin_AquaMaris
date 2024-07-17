@@ -23,6 +23,7 @@ export interface UserInterface {
     reservations: ReservationInterface[];
     comentario: Comentario[];
     photo: string;
+    is_locked?: boolean;
   }
 
   export interface Comentario {
