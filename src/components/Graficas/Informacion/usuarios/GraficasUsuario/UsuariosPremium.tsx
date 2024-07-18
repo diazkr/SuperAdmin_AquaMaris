@@ -2,7 +2,7 @@
 import React, { useEffect, useState } from "react";
 import { Bar, Pie } from "react-chartjs-2";
 import "chart.js/auto";
-import { Button, ButtonGroup } from "@mui/material";
+import { Button, ButtonGroup, CircularProgress } from "@mui/material";
 import generarDatosUsuariosMembresia, { MembershipData } from "@/callBack/usuarios/UsuariosPremium";
 
 interface UsuariosPremiumTotalesProps {
@@ -24,7 +24,9 @@ const UsuariosPremiumGrafica: React.FC<UsuariosPremiumTotalesProps> = ({
   }, [rangoMeses]);
 
   if (!datosUsuarios) {
-    return <p>Cargando datos...</p>;
+    return (<div className="h-full flex justify-center items-center">
+      <CircularProgress color="primary" />
+    </div>);
   }
 
 
@@ -47,7 +49,7 @@ const UsuariosPremiumGrafica: React.FC<UsuariosPremiumTotalesProps> = ({
   };
 
   const dataBar = {
-    labels: ["Con Reservas", "Sin Reservas"],
+    labels: ["Con Membresia", "Sin Membresia"],
     datasets: [
       {
         label: "Usuarios",

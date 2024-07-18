@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import {
   Button,
+  CircularProgress,
   List,
   ListItem,
   TextField,
@@ -73,7 +74,9 @@ const ListaHabitaciones: React.FC = () => {
       </div>
 
       {loading ? (
-        <Typography>Cargando habitaciones...</Typography>
+        <div className="h-52 flex justify-center items-center">
+          <CircularProgress color="primary" />
+        </div>
       ) : roomByNumber ? (
         <List className="bg-light-white flex flex-col shadow-eco rounded-md p-6 w-[100%] my-3">
           <ListItem>

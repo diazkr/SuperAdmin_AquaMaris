@@ -1,10 +1,16 @@
-import React from 'react';
-import { List } from '@mantine/core';
-import { Button, ListItem, TextField, Typography } from '@mui/material';
-import CardCode from './CardCode';
-import { PromoCodeInterface } from '@/callBack/promociones/GetAllPromos';
-import ErrorMessage from '@/components/Habitaciones/EditHabitacion/ErrorMessage';
-import { BsSearch } from 'react-icons/bs';
+import React from "react";
+import { List } from "@mantine/core";
+import {
+  Button,
+  CircularProgress,
+  ListItem,
+  TextField,
+  Typography,
+} from "@mui/material";
+import CardCode from "./CardCode";
+import { PromoCodeInterface } from "@/callBack/promociones/GetAllPromos";
+import ErrorMessage from "@/components/Habitaciones/EditHabitacion/ErrorMessage";
+import { BsSearch } from "react-icons/bs";
 
 interface ListaCodigosPromoProps {
   codePromo: PromoCodeInterface[];
@@ -15,7 +21,14 @@ interface ListaCodigosPromoProps {
   codeByName: PromoCodeInterface | null;
 }
 
-const ListaCodigosPromo: React.FC<ListaCodigosPromoProps> = ({ codePromo, loading, search, onSearchChange, onSearchSubmit, codeByName }) => {
+const ListaCodigosPromo: React.FC<ListaCodigosPromoProps> = ({
+  codePromo,
+  loading,
+  search,
+  onSearchChange,
+  onSearchSubmit,
+  codeByName,
+}) => {
   return (
     <div className="flex flex-col h-full w-full">
       <div className="bg-light-white flex shadow-eco rounded-md p-6 w-[100%] gap-4">
@@ -38,7 +51,9 @@ const ListaCodigosPromo: React.FC<ListaCodigosPromoProps> = ({ codePromo, loadin
       </div>
 
       {loading ? (
-        <Typography>Cargando códigos de descuento...</Typography>
+        <div className="h-52 flex justify-center items-center">
+          <CircularProgress color="primary" />
+        </div>
       ) : (
         <>
           {codeByName ? (

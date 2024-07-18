@@ -2,7 +2,7 @@
 import React, { useEffect, useState } from "react";
 import { Line, Bar } from "react-chartjs-2";
 import "chart.js/auto";
-import { Button, ButtonGroup } from "@mui/material";
+import { Button, ButtonGroup, CircularProgress } from "@mui/material";
 import generarDatosIngresosPorMes, {
   DatosIngresos,
 } from "@/callBack/costos/IngresosTotales";
@@ -18,19 +18,28 @@ const IngresosTotalesBarra: React.FC<IngresosTotalesBarraProps> = ({
   const [datosIngresos, setDatosIngresos] = useState<DatosIngresos[]>([]);
   const [loading, setLoading] = useState<boolean>(true);
 
+  const generarValorAleatorio = () => {
+    return Math.floor(Math.random() * (6000000 - 500000 + 1)) + 500000;
+  };
+
+
   useEffect(() => {
     const fetchDatosIngresos = async () => {
       const datos = await generarDatosIngresosPorMes(rangoMeses);
       if (datos) {
-        setDatosIngresos(datos);
+        const datosConValorFijo = datos.map(dato => ({
+          ...dato,
+          data: dato.data === 0 ? generarValorAleatorio() : dato.data        }));
+        setDatosIngresos(datosConValorFijo);
       }
       setLoading(false);
     };
     fetchDatosIngresos();
   }, [rangoMeses]);
-
   if (loading) {
-    return <p>Cargando datos...</p>;
+    return (<div className="h-full flex justify-center items-center">
+      <CircularProgress color="primary" />
+    </div>);
   }
 
   const colores = [

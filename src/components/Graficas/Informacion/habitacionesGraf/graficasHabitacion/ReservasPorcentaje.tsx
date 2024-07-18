@@ -2,7 +2,7 @@
 import React, { useEffect, useState } from "react";
 import { Pie } from "react-chartjs-2";
 import "chart.js/auto";
-import { Button, ButtonGroup } from "@mui/material";
+import { Button, ButtonGroup, CircularProgress } from "@mui/material";
 import generarReservasPorcentaje, { UserReservations } from "@/callBack/habitaciones/habitacionesDashboard/ReservasPorcentaje";
 
 interface ReservationsTotalesProps {
@@ -27,7 +27,9 @@ const ReservasPorcentaje: React.FC<ReservationsTotalesProps> = ({ rangoMeses }) 
   }, [rangoMeses]);
 
   if (loading) {
-    return <p>Cargando datos...</p>;
+    return (<div className="h-full flex justify-center items-center">
+      <CircularProgress color="primary" />
+    </div>);
   }
 
   const colores = [

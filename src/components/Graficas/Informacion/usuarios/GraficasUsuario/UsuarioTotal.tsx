@@ -2,7 +2,7 @@
 import React, { useEffect, useState } from "react";
 import { Line, Bar } from "react-chartjs-2";
 import "chart.js/auto";
-import { Button, ButtonGroup} from "@mui/material";
+import { Button, ButtonGroup, CircularProgress} from "@mui/material";
 import generarDatosUsuariosMes, { UserDataMes } from "@/callBack/usuarios/UsuariosPorMes";
 
 interface UsuariosTotalesBarraProps {
@@ -29,7 +29,9 @@ const UsuariosTotales: React.FC<UsuariosTotalesBarraProps> = ({
   }, [rangoMeses]);
 
   if (loading) {
-    return <p>Cargando datos...</p>;
+    return (<div className="h-full flex justify-center items-center">
+      <CircularProgress color="primary" />
+    </div>);
   }
 
 

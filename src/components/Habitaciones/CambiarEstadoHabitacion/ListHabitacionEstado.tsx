@@ -1,7 +1,7 @@
 "use client";
 
 import React, { useEffect, useState } from "react";
-import { Button, List, ListItem, TextField, Typography } from "@mui/material";
+import { Button, CircularProgress, List, ListItem, TextField, Typography } from "@mui/material";
 import { buscarHabitacionPorNumero, obtenerHabitaciones } from "@/callBack/habitaciones/HabitacionesFetch";
 import { Habitacion } from "@/components/Interfaces/HabitacionInterface";
 import { BsSearch } from "react-icons/bs";
@@ -72,7 +72,9 @@ const ListaHabitacionesEstado: React.FC = () => {
       </div>
 
       {loading ? (
-        <Typography>Cargando habitaciones...</Typography>
+        <div className="h-52 flex justify-center items-center">
+        <CircularProgress color="primary" />
+      </div>
       ) : roomByNumber ? (
         <List className="bg-light-white flex flex-col shadow-eco rounded-md p-6 w-[100%]  my-3 ">
           <ListItem>
