@@ -2,7 +2,7 @@
 import React, { useEffect, useState } from "react";
 import { Bar, Pie } from "react-chartjs-2";
 import "chart.js/auto";
-import { Button, ButtonGroup, Typography } from "@mui/material";
+import { Button, ButtonGroup, CircularProgress, Typography } from "@mui/material";
 import generarDatosUsuariosReservas, { UserData } from "@/callBack/usuarios/UsuarioReservasMock";
 
 interface UsuariosPremiumTotalesProps {
@@ -28,7 +28,9 @@ const UsuariosReservas: React.FC<UsuariosPremiumTotalesProps> = ({
   }, [rangoMeses]);
 
   if (loading) {
-    return <Typography>Cargando datos...</Typography>;
+    return (<div className="h-full flex justify-center items-center">
+      <CircularProgress color="primary" />
+    </div>);
   }
 
   if (!datosUsuarios) {
@@ -84,7 +86,7 @@ const UsuariosReservas: React.FC<UsuariosPremiumTotalesProps> = ({
     <div className="h-full flex flex-col w-[100%]">
       <div className="flex justify-between items-center">
         <h2 className="text-gray-600 font-normal text-sm">
-          Usuarios Premium
+          Usuarios con reservaciones
         </h2>
         <div>
           <ButtonGroup variant="outlined" aria-label="Basic button group">

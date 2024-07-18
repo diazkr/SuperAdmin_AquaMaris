@@ -2,7 +2,7 @@
 import React, { useEffect, useState } from "react";
 import { Line, Bar, Pie } from "react-chartjs-2";
 import "chart.js/auto";
-import { Button, ButtonGroup } from "@mui/material";
+import { Button, ButtonGroup, CircularProgress } from "@mui/material";
 import IngresosPorTipo, {
   DatosIngresos,
 } from "@/callBack/costos/IngresosPorTipo";
@@ -50,7 +50,9 @@ const IngresosTotalesPorTipo: React.FC<IngresosTotalesBarraProps> = ({
   }, [rangoMeses, tipoGrafico]);
 
   if (loading) {
-    return <p>Cargando datos...</p>;
+    return (<div className="h-full flex justify-center items-center">
+      <CircularProgress color="primary" />
+    </div>);
   }
 
   const data = {

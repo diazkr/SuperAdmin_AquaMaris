@@ -6,9 +6,9 @@ import React from "react";
 function PageRegistro() {
   return (
     <div className=" h-screen w-full flex">
-      <div className="w-7/12 relative shadow-2xl">
+      <div className="w-7/12 relative shadow-2xl bg-slate-800">
         <Image
-          src="/images/fondologin2.jpg"
+          src="/Hero/hero6.jpg"
           alt="Background Image"
           layout="fill"
           objectFit="cover"
