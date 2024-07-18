@@ -41,6 +41,8 @@ const EditModal: React.FC<EditModalProps> = ({
     setEditedHabitacion((prev) => ({
       ...prev,
       [name]: name === "price" ? Number(value) : value,
+
+      [name]: name === "roomNumber" ? Number(value) : value,
     }));
   };
 
@@ -57,7 +59,8 @@ const EditModal: React.FC<EditModalProps> = ({
           },
           body: JSON.stringify({
             ...rest,
-            price: Number(editedHabitacion.price), // Asegurarse de que price es un número
+            price: Number(editedHabitacion.price),
+            roomNumber: Number(editedHabitacion.roomNumber)
           }),
         }
       );
@@ -120,19 +123,6 @@ const EditModal: React.FC<EditModalProps> = ({
             onChange={handleChange}
             fullWidth
           />
-          <FormControl fullWidth margin="dense">
-            <InputLabel>Estado</InputLabel>
-            <Select
-              name="state"
-              value={editedHabitacion.state}
-              onChange={handleChange}
-              label="Estado"
-            >
-              <MenuItem value="available">Disponible</MenuItem>
-              <MenuItem value="inmaintenance">En Mantenimiento</MenuItem>
-              <MenuItem value="occupied">Ocupado</MenuItem>
-            </Select>
-          </FormControl>
           <TextField
             margin="dense"
             label="Número de Habitación"

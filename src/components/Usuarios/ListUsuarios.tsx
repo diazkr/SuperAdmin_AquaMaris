@@ -3,6 +3,7 @@
 import React, { useEffect, useState } from "react";
 import {
   Button,
+  CircularProgress,
   List,
   ListItem,
   TextField,
@@ -72,7 +73,9 @@ const ListaUsuario: React.FC = () => {
       </div>
 
       {loading ? (
-        <Typography>Cargando usuarios...</Typography>
+        <div className="h-52 flex justify-center items-center">
+        <CircularProgress color="primary" />
+      </div>
       ) : users.length === 0 ? (
         <ErrorMessage />
       ) : (

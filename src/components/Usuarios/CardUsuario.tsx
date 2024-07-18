@@ -46,12 +46,18 @@ const CardUsuario: React.FC<CardUserProps> = ({ user, reloadUsers }) => {
   const handleConfirmBan = async () => {
     setLoadingBan(true);
     try {
+      const token = localStorage.getItem('token'); 
+    console.log(token)
+    if (!token) {
+      throw new Error("Token not found");
+    }
       const response = await fetch(
         `${process.env.NEXT_PUBLIC_API_URL}/user/superadmin/blockUser/${id}`,
         {
           method: "PUT",
           headers: {
             "Content-Type": "application/json",
+            'Authorization': `Bearer ${token}`, 
           },
         }
       );

@@ -2,7 +2,7 @@
 import React, { useEffect, useState } from "react";
 import { Bar, Line, Pie } from "react-chartjs-2";
 import "chart.js/auto";
-import { Button, ButtonGroup } from "@mui/material";
+import { Button, ButtonGroup, CircularProgress } from "@mui/material";
 import generarReservasMes, {
   UserReservationsMes,
 } from "@/callBack/habitaciones/habitacionesDashboard/ReservasTotal";
@@ -31,7 +31,9 @@ const ReservasTotalMes: React.FC<ReservationsTotalesProps> = ({
   }, [rangoMeses]);
 
   if (loading) {
-    return <p>Cargando datos...</p>;
+    return (<div className="h-full flex justify-center items-center">
+      <CircularProgress color="primary" />
+    </div>);
   }
 
   const colores = [

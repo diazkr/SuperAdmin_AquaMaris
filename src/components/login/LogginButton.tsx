@@ -7,9 +7,10 @@ import { useAuth } from '../contextos/AuthContext';
 interface UserData {
   [key: string]: any;
 }
+
 interface AuthResponse {
   token: string;
-  userData:UserData ;
+  userData: UserData;
 }
 
 interface LoginButtonProps {
@@ -19,8 +20,8 @@ interface LoginButtonProps {
 
 const LoginButton: React.FC<LoginButtonProps> = ({ email, password }) => {
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
-  const { login } = useAuth(); 
-  const router = useRouter()
+  const { login } = useAuth();
+  const router = useRouter();
   const [success, setSuccess] = useState<boolean>(false);
   const [open, setOpen] = useState<boolean>(false);
 
@@ -44,8 +45,16 @@ const LoginButton: React.FC<LoginButtonProps> = ({ email, password }) => {
 
       const data: AuthResponse = await response.json();
       const { token, userData } = data;
-      login(token, userData); 
-      setErrorMessage(null); 
+
+      // Check if the role is SUPERADMIN
+      if (userData.role !== 'SUPERADMIN') {
+        setErrorMessage('No eres SUPERADMIN, no puedes pasar.');
+        setOpen(true);
+        return;
+      }
+
+      login(token, userData);
+      setErrorMessage(null);
       setSuccess(true);
       setOpen(true);
       setTimeout(() => {
@@ -67,7 +76,7 @@ const LoginButton: React.FC<LoginButtonProps> = ({ email, password }) => {
 
   return (
     <div className='flex flex-col justify-center items-center w-[100%]'>
-        {errorMessage && (
+      {errorMessage && (
         <Typography variant="body2" align="center" className='py-1 text-red-900'>
           {errorMessage}
         </Typography>
@@ -82,14 +91,14 @@ const LoginButton: React.FC<LoginButtonProps> = ({ email, password }) => {
         <span>Continuar</span>
       </Button>
 
-      <Snackbar 
-        open={open} 
-        autoHideDuration={6000} 
+      <Snackbar
+        open={open}
+        autoHideDuration={6000}
         onClose={handleClose}
         anchorOrigin={{ vertical: 'top', horizontal: 'right' }} // Ajusta la posición aquí
       >
-        <Alert onClose={handleClose} severity="success" sx={{ width: '100%' }}>
-          Inicio de sesión exitoso
+        <Alert onClose={handleClose} severity={success ? 'success' : 'error'} sx={{ width: '100%' }}>
+          {success ? 'Inicio de sesión exitoso' : errorMessage}
         </Alert>
       </Snackbar>
     </div>

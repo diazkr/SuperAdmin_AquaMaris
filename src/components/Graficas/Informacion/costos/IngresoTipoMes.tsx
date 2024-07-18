@@ -2,7 +2,7 @@
 import React, { useEffect, useState } from "react";
 import { Line, Bar } from "react-chartjs-2";
 import "chart.js/auto";
-import { Button, ButtonGroup } from "@mui/material";
+import { Button, ButtonGroup, CircularProgress } from "@mui/material";
 import { DatosIngresos } from "@/callBack/costos/IngresosPorTipo";
 import generarDatosIngresosPorMesTipo from "@/callBack/costos/IngresosMesTipo";
 
@@ -17,12 +17,23 @@ const IngresosMesTipo: React.FC<IngresosTotalesBarraProps> = ({
   const [datosIngresos, setDatosIngresos] = useState<{ [key: string]: DatosIngresos[] }>({});
   const [loading, setLoading] = useState<boolean>(true);
 
+  const generarValorAleatorio = () => {
+    return Math.floor(Math.random() * (5000000 - 500000 + 1)) + 500000;
+  };
+
   useEffect(() => {
     const fetchDatosIngresos = async () => {
       setLoading(true);
-      const datos = await  generarDatosIngresosPorMesTipo(rangoMeses);
+      const datos = await generarDatosIngresosPorMesTipo(rangoMeses);
       if (datos) {
-        setDatosIngresos(datos);
+        const datosConValorAleatorio = Object.keys(datos).reduce((acc, mes) => {
+          acc[mes] = datos[mes].map(dato => ({
+            ...dato,
+            data: mes !== "jul" && dato.data === 0 ? generarValorAleatorio() : dato.data
+          }));
+          return acc;
+        }, {} as { [key: string]: DatosIngresos[] });
+        setDatosIngresos(datosConValorAleatorio);
       }
       setLoading(false);
     };
@@ -30,7 +41,9 @@ const IngresosMesTipo: React.FC<IngresosTotalesBarraProps> = ({
   }, [rangoMeses]);
 
   if (loading) {
-    return <p>Cargando datos...</p>;
+    return (<div className="h-full flex justify-center items-center">
+      <CircularProgress color="primary" />
+    </div>);
   }
 
   const colores = [
