@@ -32,5 +32,6 @@ export interface UserInterface {
     rating: number;
     comment_date:string;
     comment_status: string;
+    user?: any;
   }
   

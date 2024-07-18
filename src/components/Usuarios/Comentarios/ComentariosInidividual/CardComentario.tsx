@@ -9,6 +9,7 @@ import {
 } from "@mui/material";
 import { useState } from "react";
 import { Comentario } from "@/components/Interfaces/UserInterface";
+import Image from "next/image";
 
 interface CardUserProps {
   comentario: Comentario;
@@ -19,7 +20,8 @@ const CardComentario: React.FC<CardUserProps> = ({
   comentario,
   onComentarioActualizado,
 }) => {
-  const { id, comment, rating, comment_date, comment_status } = comentario;
+  const { id, comment, rating, comment_date, comment_status, user } =
+    comentario;
 
   const [openSnackbar, setOpenSnackbar] = useState(false);
   const [snackbarMessage, setSnackbarMessage] = useState("");
@@ -108,20 +110,39 @@ const CardComentario: React.FC<CardUserProps> = ({
     console.log("Snackbar is closing");
     setOpenSnackbar(false);
   };
-
+  const getImageUrl = (userPhoto: string | undefined) => {
+    if (userPhoto && !userPhoto.endsWith("photo.jpg")) {
+      return userPhoto;
+    }
+    return "/iconos/usuario.png";
+  };
   return (
     <div className="my-1 border border-gray-300 w-[100%]">
-      <div className="flex rounded-sm gap-2 justify-between">
-        <div>
+      <div className="flex  rounded-sm gap-2 justify-between">
+        <div className="flex">
+          <div className="flex justify-center items-center m-3">
+            <Image
+              src={getImageUrl(user.user_photo)}
+              width="40"
+              height="40"
+              alt="User Icon"
+              className="rounded-full m-1"
+            />
+          </div>
           <div>
-            <Rating name="read-only" value={rating} readOnly />
-          </div>
-          <div className="flex items-center">
-            <p className="mx-2 text-xs text-gray-600 ">{comment_date}</p>
-          </div>
+            <div>
+              <p className="mx-2 text-xs text-gray-600 ">{user.name}</p>
+            </div>
+            <div className="flex items-center">
+              <p className="mx-2 text-sm ">{comment}</p>
+            </div>
 
-          <div className="flex items-center">
-            <p className="mx-2 text-sm ">{comment}</p>
+            <div>
+              <Rating name="read-only" value={rating} readOnly />
+            </div>
+            <div className="flex items-center">
+              <p className="mx-2 text-xs text-gray-600 ">{comment_date}</p>
+            </div>
           </div>
         </div>
 
