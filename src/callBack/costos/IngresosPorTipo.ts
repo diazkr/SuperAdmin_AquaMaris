@@ -28,6 +28,8 @@ const IngresosPorTipo = async (
       throw new Error("Error al obtener los datos de ingresos por mes");
     }
     const data: DatosIngresos[] = await response.json();
+
+    console.log(data)
     return data;
   } catch (error) {
     console.error("Error en generarDatosIngresosPorMes:", error);

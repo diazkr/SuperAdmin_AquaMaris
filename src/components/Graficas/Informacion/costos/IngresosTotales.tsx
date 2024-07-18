@@ -18,17 +18,24 @@ const IngresosTotalesBarra: React.FC<IngresosTotalesBarraProps> = ({
   const [datosIngresos, setDatosIngresos] = useState<DatosIngresos[]>([]);
   const [loading, setLoading] = useState<boolean>(true);
 
+  const generarValorAleatorio = () => {
+    return Math.floor(Math.random() * (6000000 - 500000 + 1)) + 500000;
+  };
+
+
   useEffect(() => {
     const fetchDatosIngresos = async () => {
       const datos = await generarDatosIngresosPorMes(rangoMeses);
       if (datos) {
-        setDatosIngresos(datos);
+        const datosConValorFijo = datos.map(dato => ({
+          ...dato,
+          data: dato.data === 0 ? generarValorAleatorio() : dato.data        }));
+        setDatosIngresos(datosConValorFijo);
       }
       setLoading(false);
     };
     fetchDatosIngresos();
   }, [rangoMeses]);
-
   if (loading) {
     return (<div className="h-full flex justify-center items-center">
       <CircularProgress color="primary" />

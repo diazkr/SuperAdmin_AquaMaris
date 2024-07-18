@@ -27,6 +27,7 @@ const SelectGeneral: React.FC<SelectGeneralProps> = ({ setRangoMeses }) => {
       <FormControl variant="outlined" fullWidth margin="normal">
         <InputLabel>Ver datos de:</InputLabel>
         <Select defaultValue={6} onChange={handleRangoChange} label="Ver datos de:">
+        <MenuItem value={1}>Último mes</MenuItem>
           <MenuItem value={3}>Últimos 3 meses</MenuItem>
           <MenuItem value={5}>Últimos 5 meses</MenuItem>
           <MenuItem value={6}>Últimos 6 meses</MenuItem>
